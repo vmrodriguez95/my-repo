@@ -1,0 +1,23 @@
+html
+    head
+        title
+        meta(charset="utf-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1")
+        link(rel="stylesheet", href="/css/styles.css")
+    
+    body.color-bg-black.text--center
+        section.login-box.text--center.color--white.padding
+            h1.margin--0 Bienvenido
+            img.icon-avatar.margin-v-(src="/img/icon-avatar.svg")
+            button.login-button.color--white.color-bg-transparent.margin-v-
+                span Iniciar sesión
+                img.icon-google(src="/img/icon-google.svg")
+            button.signin-button.color--white.color-bg-transparent
+                span Registrarse
+                img.icon-google(src="/img/icon-google.svg")
+        
+        script(src="https://www.gstatic.com/firebasejs/5.0.3/firebase.js")
+        script.
+            firebase.initializeApp(#{firebaseConfig});
+            
+        script(src="/js/script.js")

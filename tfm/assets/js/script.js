@@ -22,14 +22,12 @@
         function init() {
             let button = document.getElementById("search");
     
-            button.addEventListener("click", () => {
+            button.addEventListener("click", (event) => {
                 let query = document.getElementById("query").value;
                 let url = `/search?q=${query}`;
                 
-                obj.ajax.getRequest(url, query, function(data) {
+                obj.ajax.getRequest(url, query, (data) => {
                     let results = JSON.parse(data);
-                    
-                    //console.log(results);
                     
                     results["items"].forEach((item, i) => {
                         console.log("ITEM --> ", item);
@@ -41,5 +39,18 @@
         return {init}
     })();
     
-    obj.search.init();
+    obj.firebaseFunctions = (() => {
+        function googleSesion() {
+            
+        }
+        
+    })();
+    
+    obj.init = (() => {
+        if(window.location.pathname === "/") {
+            
+        }
+    })();
+    
+    //obj.search.init();
 })();
