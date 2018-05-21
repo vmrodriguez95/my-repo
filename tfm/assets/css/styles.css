@@ -102,6 +102,24 @@ div {
     padding: 96px !important;
 }
 
+/* Hidden elements */
+.hidden {
+    visibility: hidden;
+}
+.disappeared {
+    display: none;
+}
+@media screen and (min-width: 960px) {
+    .hide--lrg {
+        display: none;
+    }
+}
+@media screen and (max-width: 960px) {
+    .hide--sm {
+        display: none;
+    }
+}
+
 /**************************** END GENERAL ESTYLES ****************************/
 /* Estilos Login */
 .login-box {
@@ -119,9 +137,14 @@ div {
     cursor: pointer;
     padding: 12px;
     min-width: 200px;
-    border: 0;
     border-radius: 2px;
     border: 1px solid #ff8c00;
+    transition: all 0.3s;
+}
+.login-box .login-button:hover,
+.login-box .signin-button:hover {
+    color: #333;
+    background-color: #ff8c00;
 }
 .login-box .icon-google {
     max-width: 15px;

@@ -2,6 +2,7 @@ const express = require('express');
 const https = require('https');
 const path = require("path");
 const config = require("./config");
+const connection = require("./connection");
 const app = express();
 const port = process.env.PORT || 8080;
 
@@ -12,14 +13,27 @@ app.use('/css', express.static(path.join(__dirname, '../assets/css')));
 app.use('/img', express.static(path.join(__dirname, '../assets/images')));
 app.use('/js', express.static(path.join(__dirname, '../assets/js')));
 
+//Render templates
 app.get('/', (req, res) => {
-    let firebaseConfig = JSON.stringify(config.firebase);
-    
-    res.render('login');
-    res.end(firebaseConfig);
+    res.render('login', {firebaseConfig: JSON.stringify(config.firebase)});
 });
 
-/*app.get('/', (req, res) => {
+
+//Ajax requests
+app.get('/users/check', (req, res) => {
+    let result = connection.users.get(req.query.uid);
+    
+    console.log(typeof result);
+    console.log(result);
+    
+    /*if(result) {
+        
+    }*/
+    
+    res.end();
+});
+
+/*app.get('/:user', (req, res) => {
     res.render('index');
 });*/
 
@@ -28,7 +42,6 @@ app.get('/search', (req, res) => {
     let data = '';
     
     https.get(url, (response) => {
-        
         response.on("data", (chunk) => {
             data += chunk.toString();
         });
