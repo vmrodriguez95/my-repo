@@ -59,7 +59,7 @@
                 let url = `/users/check?uid=${user.uid}`;
                 
                 obj.ajax.getRequest(url, (data) => {
-                    console.log("Holaaaa");
+                    window.location.href = `/${user.uid}`;
                 });
                 
             }).catch(function(error) {
@@ -88,10 +88,12 @@
         function getCurrentUser() {
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
-                    console.log(user);
-                    // User is signed in.
+                    //console.log(user);
+                    if(window.location.pathname === '/') {
+                        window.location.href = `/${user.uid}`;
+                    }
                 } else {
-                    if(window.location.pathname !== "/") {
+                    if(window.location.pathname !== '/') {
                         window.location.href = '/';
                     }
                 }
@@ -103,16 +105,15 @@
     })();
     
     obj.init = (() => {
+        obj.firebaseFunctions.init();
+        obj.firebaseFunctions.getCurrentUser();
+        
         if(window.location.pathname === '/') {
-            obj.firebaseFunctions.init();
-            obj.firebaseFunctions.getCurrentUser();
             let loginButton = document.getElementsByClassName('login-button')[0];
             
             loginButton.addEventListener('click', () => {
                 obj.firebaseFunctions.login();
-            })
+            });
         }
     })();
-    
-    //obj.search.init();
 })();
