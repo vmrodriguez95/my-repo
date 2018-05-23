@@ -5,9 +5,18 @@ html
         meta(name="viewport", content="width=device-width, initial-scale=1")
         link(rel="stylesheet", href="/css/styles.css")
     body.color-bg-black
-        h1 Adelante, busca el video que quieras.
-        input(id="query", type="text", placeholder="Buscador")
-        button(id="search", type="button")
-            img(src="/img/icon-search.svg", width="15")
-        div(id="container-search-results")
+        include includes/header.pug
+        section.layout.padding-top--.dashboard
+            ul.layout-wrapper.tab-list
+                li(class="layout-item col-1/3 tab active")
+                    span Recientes
+                li(class="layout-item col-1/3 tab")
+                    span Likes
+                li(class="layout-item col-1/3 tab")
+                    span Playlists
+        section.layout
+            article.layout-wrapper
+                ul.layout-item#container-recents
+                ul.layout-item#container-likes.disappeared
+                ul.layout-item#container-playlists.disappeared
         script(src="/js/script.js")
