@@ -4,19 +4,30 @@ html
         meta(charset="utf-8")
         meta(name="viewport", content="width=device-width, initial-scale=1")
         link(rel="stylesheet", href="/css/styles.css")
+        link(href="https://fonts.googleapis.com/css?family=Roboto", rel="stylesheet")
     body.color-bg-black
         include includes/header.pug
-        section.layout.padding-top--.dashboard
-            ul.layout-wrapper.tab-list
+        section#dashboard-header.layout.padding-top--
+            ul.layout-wrapper.tab-list.padding--0
                 li(class="layout-item col-1/3 tab active")
                     span Recientes
                 li(class="layout-item col-1/3 tab")
                     span Likes
                 li(class="layout-item col-1/3 tab")
                     span Playlists
-        section.layout
+        section#dashboard-body.layout
             article.layout-wrapper
-                ul.layout-item#container-recents
-                ul.layout-item#container-likes.disappeared
-                ul.layout-item#container-playlists.disappeared
+                ul.layout-item#container-recents.list
+                    li.empty.text--center Todavía no has visualizado ningún vídeo.
+                ul.layout-item#container-likes.disappeared.list
+                    li.empty.text--center Todavía no le has dado like a ningún vídeo.
+                ul.layout-item#container-playlists.disappeared.list
+                    li.empty.text--center Todavía no has creado ninguna playlist
+        section#search-container.layout
+            article.layout-wrapper
+                aside.layout-item
+                    ul.list
+        p#firebaseConfig.disappeared= firebaseConfig
+        script(src="https://www.gstatic.com/firebasejs/5.0.3/firebase.js")
         script(src="/js/script.js")
+        script(src="https://www.youtube.com/iframe_api")

@@ -13,8 +13,8 @@ class Database {
                 if(err)
                     return reject(err);
                 resolve(rows);
-            } );
-        } );
+            });
+        });
     }
     close() {
         return new Promise((resolve, reject) => {
@@ -52,11 +52,14 @@ const mysqlStatements = (() => {
                 if(result.length === 0) {
                     users.insertUser(uid).then((result) => {
                         console.log("User was registered correctly");
+                        return "OK";
                     }).catch((err) => {
                         console.log("Problems to register user");
+                        return "KO";
                     });
                 } else {
                     console.log("User is registered already");
+                    return "OK";
                 }
             });
         }
@@ -64,59 +67,5 @@ const mysqlStatements = (() => {
     
     return {users};
 })();
-
-/*connection.connect((err) => {
-    if (err) throw err;
-    console.log("Connected!");
-    
-    function sendQuery(callback) {
-        callback(connection);
-    }
-    
-    //connection.query(sql, function (err, result) {
-        //callback(result);
-    //});
-});
-
-const mysqlStatements = (() => {
-    let sql = "";
-    const users = {
-        getUser: (uid) => {
-            return new Promise((resolve, reject) => {
-                sql = `SELECT uid FROM users WHERE uid = \"${uid}\"`;
-                //start(sql, (result) => {
-                    //resolve(result);
-                //});
-                sendQuery((connection) => {
-                    connection.query(sql, function (err, result) {
-                        callback(result);
-                    });
-                    //resolve(result);
-                });
-            });
-        },
-        checkUser: (uid) => {
-            users.getUser(uid).then((result) => {
-                if(result.length === 0) {
-                    users.insertUser(uid).then((result) => {
-                        console.log("Resultado insert --> ", result);
-                    });
-                } else {
-                    console.log("Pos paece que ya está en la bd");
-                }
-            });
-        },
-        insertUser: (uid) => {
-            return new Promise((resolve, reject) => {
-                sql = `INSERT INTO users VALUES (null, \"${uid}\")`;
-                start(sql, (result) => {
-                    resolve(result);
-                });
-            });
-        }
-    }
-    
-    return {users};
-})();*/
 
 module.exports = mysqlStatements;

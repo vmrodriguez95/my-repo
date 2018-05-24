@@ -5,8 +5,9 @@ html, body {
     padding: 0;
     box-sizing: border-box;
     overflow: hidden;
+    font-family: Roboto;
 }
-div, header, section, article, ul, li {
+div, header, section, article, ul, li, nav {
     box-sizing: border-box;
 }
 img {
@@ -35,14 +36,14 @@ img {
 .color-bg-white--overlay {
     background-color: rgba(255, 255, 255, 0.8);
 }
-.color--orange {
-    color: #ff8c00;
+.color--blue {
+    color: #239ea0;
 }
-.color-bg-orange {
-    background-color: #ff8c00;
+.color-bg-blue {
+    background-color: #239ea0;
 }
-.color-bg-orange--overlay {
-    background-color: rgba(255, 140, 0, 0.8);
+.color-bg-blue--overlay {
+    background-color: rgba(35, 158, 160, 0.8);
 }
 
 /* Grid */
@@ -743,56 +744,16 @@ img {
     }
 }
 
-/**************************** END GENERAL ESTYLES ****************************/
-/* Estilos header */
-#header-desktop nav {
-    box-shadow: 0 0 5px 0 #000;
-}
-#header-desktop img {
-    width: 28px;
-    cursor: pointer;
-}
-
-/* Estilos Dashboard */
-.tab-list .tab {
-    background-color: #333;
+/* List */
+.list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
     color: #fff;
-    cursor: pointer;
-    text-align: center;
-    position: relative;
-    transition: all 0.3s;
-}
-.tab-list .tab:hover {
-    background-color: #4a4a4a;
-    color: #ff8c00;
-}
-.tab-list .tab::after {
-    content: '';
-    height: 2px;
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    right: 50%;
-    background-color: #ff8c00;
-    transition: left 0.3s, right 0.3s;
-}
-.tab-list .tab:hover::after {
-    left: 0;
-    right: 0;
-}
-.tab-list .tab.active {
-    color: #ff8c00;
-}
-.tab-list .tab.active::after {
-    left: 0;
-    right: 0;
-}
-.tab-list .tab span {
-    display: inline-block;
-    padding: 12px;
 }
 
-/* Estilos Login */
+/**************************** END GENERAL ESTYLES ****************************/
+/* INIT Login */
 .login-box {
     display: inline-block;
     margin: 0 auto;
@@ -809,17 +770,137 @@ img {
     padding: 12px;
     min-width: 200px;
     border-radius: 2px;
-    border: 1px solid #ff8c00;
+    border: 1px solid #239ea0;
     transition: all 0.3s;
 }
 .login-box .login-button:hover,
 .login-box .signin-button:hover {
-    color: #333;
-    background-color: #ff8c00;
+    color: #fff;
+    background-color: #239ea0;
 }
 .login-box .icon-google {
     max-width: 15px;
     margin-left: 5px;
     vertical-align: middle;
 }
-/* FIN estilos Login */
+/* END Login */
+/* INIT Header */
+#header-desktop {
+    background-color: #222;
+    z-index: 1;
+    position: relative;
+}
+#header-desktop img {
+    width: 28px;
+    cursor: pointer;
+    transition: width 0.3s;
+}
+#header-desktop #query {
+    padding: 0;
+    border-radius: 2px;
+    border: 0;
+    vertical-align: top;
+    margin-right: 5px;
+}
+#header-desktop[mode-search="off"] #query {
+    width: 0;
+}
+#header-desktop[mode-search="on"] #query {
+    width: calc(100% - 33px);
+    padding: 6px;
+    transition: width 0.3s;
+}
+/* END Header */
+/* INIT Dashboard */
+#dashboard-header {
+    box-shadow: 0 0 5px 0 #000;
+}
+#dashboard-header .tab-list .tab {
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s;
+}
+#dashboard-header .tab-list .tab:hover {
+    background-color: #4a4a4a;
+    color: #239ea0;
+}
+#dashboard-header .tab-list .tab::after {
+    content: '';
+    height: 2px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    right: 50%;
+    background-color: #239ea0;
+    transition: left 0.3s, right 0.3s;
+}
+#dashboard-header .tab-list .tab:hover::after {
+    left: 0;
+    right: 0;
+}
+#dashboard-header .tab-list .tab.active {
+    color: #239ea0;
+}
+#dashboard-header .tab-list .tab.active::after {
+    left: 0;
+    right: 0;
+}
+#dashboard-header .tab-list .tab span {
+    display: inline-block;
+    padding: 12px;
+}
+#dashboard-body {
+    
+}
+/* END dashboard */
+/* INIT Search */
+#search-container {
+    position: absolute;
+    width: 0;
+    height: 0;
+    top: 20px;
+    right: 20px;
+    background-color: #333;
+    overflow: hidden;
+    transition: all 0.3s;
+    z-index: 2;
+}
+#search-container.on {
+    top: 56px;
+    right: 0;
+    width: 100%;
+    height: calc(100% - 56px);
+    overflow: auto;
+}
+#search-container ul li:not(:last-child) {
+    border-bottom: 1px solid #444;
+}
+#search-container .video {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s;
+}
+#search-container .video iframe {
+    margin: 0 auto;
+    padding-top: 12px;
+    display: block;
+}
+#search-container .video-info {
+    padding: 12px;
+}
+#search-container .video-info:hover {
+    background-color: #4a4a4a;
+    cursor: pointer;
+}
+#search-container .video-info img {
+    width: 150px;
+    vertical-align: middle;
+}
+#search-container .video-info p {
+    display: inline-block;
+    margin-left: 24px;
+}
+/* END Search */

@@ -1,11 +1,10 @@
-header#header-desktop
+header#header-desktop(mode-search="off")
     nav.layout.padding-
         ul.layout-wrapper.margin-v-0.padding--0
-            li(class="layout-item col-1/5")
-                img(class="icon-menu", data-js="_menu", src="/img/icon-menu.svg")
-            li(class="layout-item col-3/5 text--center")
-                h1.color--white.margin--0 Tu buscador
-            li(class="layout-item col-1/5 text--right")
-                img(src="/img/icon-search.svg")
+            li(class="layout-item col-1/2")
+                img.icon-menu(data-js="_menu", src="/img/icon-menu.svg")
+            li(class="layout-item col-1/2 text--right")
+                input#query(type="text", placeholder="Buscador")
+                img.button-search(src="/img/icon-search.svg", alt="Buscar", title="Buscar")
 section.disappeared.menu-background.color-bg-black--overlay
-ul
+ul.nav.list

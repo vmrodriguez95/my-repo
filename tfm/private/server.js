@@ -1,3 +1,4 @@
+
 const express = require('express');
 const https = require('https');
 const path = require("path");
@@ -18,31 +19,38 @@ app.get('/', (req, res) => {
     res.render('login', {firebaseConfig: JSON.stringify(config.firebase)});
 });
 
-app.get('/:user', (req, res) => {
+app.get('/dashboard/:user', (req, res) => {
     res.render('index', {firebaseConfig: JSON.stringify(config.firebase)});
 });
 
 //Ajax requests
 app.get('/users/check', (req, res) => {
-    console.log(connection.users.checkUser(req.query.uid));
-    res.writeHead(200, {"Content-Type": "text/plain"});
-    res.end("OK");
+    if(req.xhr) {
+        res.writeHead(200, {"Content-Type": "text/plain"});
+        res.end(connection.users.checkUser(req.query.uid));
+    } else {
+        res.redirect("/");
+    }
 });
 
 app.get('/search', (req, res) => {
-    let url = `${config.youtube.url}?key=${config.youtube.key}&q=${req.query.q}&part=${config.youtube.part}&type=${config.youtube.type}`;
-    let data = '';
-    
-    https.get(url, (response) => {
-        response.on("data", (chunk) => {
-            data += chunk.toString();
-        });
+    if(req.xhr) {
+        let url = `${config.youtube.url}?key=${config.youtube.key}&q=${req.query.q}&part=${config.youtube.part}&type=${config.youtube.type}&maxResults=${config.youtube.maxResults}`;
+        let data = '';
         
-        response.on('end', () => {
-            res.writeHead(200, {"Content-Type": "text/plain"});
-            res.end(data);
+        https.get(url, (response) => {
+            response.on("data", (chunk) => {
+                data += chunk.toString();
+            });
+            
+            response.on('end', () => {
+                res.writeHead(200, {"Content-Type": "text/plain"});
+                res.end(data);
+            });
         });
-    });
+    } else {
+        res.redirect("/");
+    }
 });
 
 app.listen(port, () => {
