@@ -117,7 +117,7 @@
                     let id = bro.getAttribute('data-url');
                     
                     if(!bro.querySelector('iframe')) {
-                        obj.youtube.onYouTubeIframeAPIReady(iframe, id);
+                        //obj.youtube.onYouTubeIframeAPIReady(iframe, id);
                     }
                     
                     _video = bro.querySelector('iframe');
@@ -210,6 +210,55 @@
         }
         
         return {init, login, logout, getCurrentUser};
+    })();
+    
+    obj.slider = (() => {
+        const sliders = document.querySelectorAll('[data-js="_slider"]');
+        
+        sliders.forEach((slider, i) => {
+            let config = {};
+            config._this = slider.querySelector('.slider-container');
+            config.sliderList = config._this.querySelector('.slider-list');
+            config.slides = config.sliderList.querySelectorAll('.slide');
+            config.numSlides = config.slides.length;
+            config.currentSlide = 0;
+            config.nextButton = config._this.querySelector('.next');
+            config.prevButton = config._this.querySelector('.prev');
+            
+            setStyles(config);
+            
+            config.nextButton.addEventListener('click', () => { nextSlide(config) });
+            config.prevButton.addEventListener('click', () => { prevSlide(config) });
+        });
+        
+        function setStyles(config) {
+            let slideView = config._this.offsetWidth;
+            let maxWidth = slideView * config.numSlides;
+            config.sliderList.style.width = maxWidth + 'px';
+            config.slides.forEach((slide, i) => {
+                slide.style.width = slideView + 'px';
+            });
+        }
+        
+        function nextSlide(config) {
+            if(config.currentSlide < (config.numSlides - 1)) {
+                config.currentSlide++;
+                showSlide(config);
+            }
+        }
+        
+        function prevSlide(config) {
+            if(config.currentSlide > 0) {
+                config.currentSlide--;
+                showSlide(config);
+            }
+        }
+        
+        function showSlide(config) {
+            let pos = -1 * config._this.offsetWidth * config.currentSlide;
+            
+            config.sliderList.style.transform = `translateX(${pos}px)`;
+        }
     })();
     
     obj.init = (() => {

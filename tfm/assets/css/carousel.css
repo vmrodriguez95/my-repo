@@ -1,0 +1,18 @@
+.slider-container {
+	width: 100%;
+	overflow: hidden;
+	position: relative;
+}
+.slider-container .slider-list {
+	width: 0;
+	padding: 0;
+	margin: 0;
+	transform: translateX(0);
+	transition: transform 0.3s;
+}
+.slider-container .slider-list .slide {
+	width: 0;
+	min-height: 10px;
+	float: left;
+	display: block;
+}

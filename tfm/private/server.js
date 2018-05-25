@@ -53,6 +53,10 @@ app.get('/search', (req, res) => {
     }
 });
 
+app.get('/carousel', (req, res) => {
+    res.render("carousel");
+});
+
 app.listen(port, () => {
     console.log("Server ready!!");
 });

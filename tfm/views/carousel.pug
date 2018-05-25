@@ -1,0 +1,18 @@
+html
+    head
+        title Carousel Example
+        meta(charset="utf-8")
+        link(rel="stylesheet", href="/css/carousel.css")
+    body
+        div.slider(data-js="_slider")
+            div.slider-container
+                button.prev prev
+                ul.slider-list
+                    li.slide(style="background-color: blue;")
+                    li.slide(style="background-color: red;")
+                    li.slide(style="background-color: green;")
+                    li.slide(style="background-color: yellow;")
+                    li.slide(style="background-color: purple;")
+                    li.slide(style="background-color: black;")
+                button.next Next
+        script(src="/js/libraries/carousel.js")
