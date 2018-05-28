@@ -60,11 +60,27 @@
                     
                     if(results) {
                         let html = '';
+                        let cont = 0;
+                        let videoUrl = '';
+                        const numMaxResults = 3;
+                        const numResults = results['items'].length;
+                        
                         results['items'].forEach((item, i) => {
+                            if(cont === 0) {
+                                html += '<li class="slide layout">';
+                                videoUrl = `https://www.youtube.com/embed/${item.id.videoId}`;
+                            } else if(cont % numMaxResults === 0 && cont < numResults) {
+                                html += '</li><li class="slide layout">';
+                            } else if(cont === numResults) {
+                                html += '</li>';
+                            }
                             html += printList('search', item);
+                            
+                            cont++;
                         });
                         
                         let container = document.getElementById('search-container');
+                        container.querySelector('iframe').src = videoUrl;
                         container.querySelector('ul').innerHTML = html;
                         container.classList.add('on');
                         
@@ -74,40 +90,30 @@
             }
         }
         
-        function printList(type, video) {
+        function printList(type, video, numVideos) {
             const types = ['search', 'recents', 'likes', 'playlist', 'playlist-video'];
             let html = '';
             
             if(types.indexOf(type) >= 0) {
-                html += '<li>';
-                    html += `<div class="video" data-url="${video.id.videoId}">`;
-                        html += '<div></div>';
-                    html += '</div>';
-                    html += '<div class="video-info">';
+                html += `<div class="layout-item col-1/3 padding- video-card" data-url="https://www.youtube.com/embed/${video.id.videoId}">`;
+                    html += '<div class="video">';
                         html += `<img src="${video.snippet.thumbnails.high.url}" />`;
+                    html += '</div><div class="video-info">';
                         html += `<p>${video.snippet.title}</p>`;
+                        html += `<p>${video.snippet.channelTitle}</p>`;
                     html += '</div>';
-                    html += '<div class="video-buttons">';
-                        
-                    html += '</div>';
-                html += '</li>';
+                html += '</div>';
             }
             return html;
         }
         
         function addListEvents() {
-            const list = document.querySelector('#search-container .list');
+            const list = document.querySelector('#search-container .slider-list');
+            
+            setTimeout(() => {obj.slider.init()}, 1000);
             
             list.addEventListener('click', (e) => {
-                const target = e.target;
-                const targetParent = target.parentNode;
                 
-                if(targetParent.classList.contains('video-info')) {
-                    setSrcVideo(list, targetParent.previousSibling);
-                    
-                } else if(target.classList.contains('video-info')) {
-                    setSrcVideo(list, target.previousSibling);
-                }
             });
             
             function setSrcVideo(list, bro) {
@@ -117,7 +123,7 @@
                     let id = bro.getAttribute('data-url');
                     
                     if(!bro.querySelector('iframe')) {
-                        //obj.youtube.onYouTubeIframeAPIReady(iframe, id);
+                        
                     }
                     
                     _video = bro.querySelector('iframe');
@@ -135,22 +141,6 @@
         }
         
         return {init}
-    })();
-    
-    obj.youtube = (() => {
-        function onYouTubeIframeAPIReady(container, id) {
-            let player = new YT.Player(container, {
-                height: '315',
-                width: '560',
-                videoId: `${id}`,
-                events: {
-                    'onStateChange': (event) => {
-                        console.log("Youtube video state --> ", event);
-                    }
-                }
-            });
-        }
-        return {onYouTubeIframeAPIReady}
     })();
     
     obj.firebaseFunctions = (() => {
@@ -213,23 +203,25 @@
     })();
     
     obj.slider = (() => {
-        const sliders = document.querySelectorAll('[data-js="_slider"]');
+        function init() {
+            const sliders = document.querySelectorAll('[data-js="_slider"]');
         
-        sliders.forEach((slider, i) => {
-            let config = {};
-            config._this = slider.querySelector('.slider-container');
-            config.sliderList = config._this.querySelector('.slider-list');
-            config.slides = config.sliderList.querySelectorAll('.slide');
-            config.numSlides = config.slides.length;
-            config.currentSlide = 0;
-            config.nextButton = config._this.querySelector('.next');
-            config.prevButton = config._this.querySelector('.prev');
-            
-            setStyles(config);
-            
-            config.nextButton.addEventListener('click', () => { nextSlide(config) });
-            config.prevButton.addEventListener('click', () => { prevSlide(config) });
-        });
+            sliders.forEach((slider, i) => {
+                let config = {};
+                config._this = slider.querySelector('.slider-container');
+                config.sliderList = config._this.querySelector('.slider-list');
+                config.slides = config.sliderList.querySelectorAll('.slide');
+                config.numSlides = config.slides.length;
+                config.currentSlide = 0;
+                config.nextButton = config._this.querySelector('.next');
+                config.prevButton = config._this.querySelector('.prev');
+                
+                setStyles(config);
+                
+                config.nextButton.addEventListener('click', () => { nextSlide(config) });
+                config.prevButton.addEventListener('click', () => { prevSlide(config) });
+            });
+        }
         
         function setStyles(config) {
             let slideView = config._this.offsetWidth;
@@ -259,6 +251,8 @@
             
             config.sliderList.style.transform = `translateX(${pos}px)`;
         }
+        
+        return {init};
     })();
     
     obj.init = (() => {

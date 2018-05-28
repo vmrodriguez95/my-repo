@@ -1,4 +1,3 @@
-
 const express = require('express');
 const https = require('https');
 const path = require("path");
@@ -51,10 +50,6 @@ app.get('/search', (req, res) => {
     } else {
         res.redirect("/");
     }
-});
-
-app.get('/carousel', (req, res) => {
-    res.render("carousel");
 });
 
 app.listen(port, () => {

@@ -745,11 +745,67 @@ img {
 }
 
 /* List */
-.list {
+.list,
+.slider-list {
     list-style: none;
     padding: 0;
     margin: 0;
     color: #fff;
+}
+
+/* Slider */
+.slider-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+.slider-container .next,
+.slider-container .prev {
+    border: 0;
+    background: transparent;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    height: 24px;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    width: 24px;
+    z-index: 10;
+}
+.slider-container .next {
+    right: 0;
+    background-image: url(/img/icon-next.svg);
+}
+.slider-container .prev {
+    left: 0;
+    background-image: url(/img/icon-back.svg);
+}
+.slider-container .slider-list {
+    color: #333;
+    display: block;
+    width: 100%;
+    transform: translateX(0);
+    transition: transform 0.3s;
+}
+.slider-container .slider-list .slide {
+    padding: 12px;
+    float: left;
+}
+
+
+/* Video Cards */
+.video-card {
+    display: inline-block;
+    text-align: left;
+    max-width: 300px;
+}
+.video-card .video-info {
+    background-color: #f4f4f4;
+    min-height: 150px;
+    padding: 12px;
+}
+.video-card .video-info p:first-child {
+    margin-top: 0;
 }
 
 /**************************** END GENERAL ESTYLES ****************************/
@@ -875,32 +931,8 @@ img {
     height: calc(100% - 56px);
     overflow: auto;
 }
-#search-container ul li:not(:last-child) {
-    border-bottom: 1px solid #444;
-}
-#search-container .video {
-    height: 0;
-    overflow: hidden;
-    transition: height 0.3s;
-}
-#search-container .video iframe {
+#search-container iframe {
     margin: 0 auto;
-    padding-top: 12px;
     display: block;
-}
-#search-container .video-info {
-    padding: 12px;
-}
-#search-container .video-info:hover {
-    background-color: #4a4a4a;
-    cursor: pointer;
-}
-#search-container .video-info img {
-    width: 150px;
-    vertical-align: middle;
-}
-#search-container .video-info p {
-    display: inline-block;
-    margin-left: 24px;
 }
 /* END Search */
