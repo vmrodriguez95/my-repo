@@ -26,12 +26,14 @@ html
         section#search-container.layout.slider(data-js="_slider")
             article.layout-wrapper
                 aside.layout-item.padding-.player
+                    img.close-search(src="/img/icon-close.svg")
                     iframe(width="560", height="315", src="", frameborder="0")
                 aside.layout-item.slider-container
                     button.prev
-                    ul.slider-list.text--center
+                    ul.slider-list.text--center(data-js="_calcHeight", data-eq-items=".video-card .video-info")
                     button.next
+                    ul.slider-controls.text--center
         p#firebaseConfig.disappeared= firebaseConfig
         script(src="https://www.gstatic.com/firebasejs/5.0.3/firebase.js")
-        script(src="/js/script.js")
+        script(src="/js/script.js", async)
         

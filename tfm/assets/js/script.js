@@ -19,13 +19,17 @@
     })();
     
     obj.search = (() => {
+        let searchContainer = "";
+        let header = "";
+        let modeSearch = '';
+        
         function init() {
             openSearcher();
         }
         
         function openSearcher() {
-            const header = document.getElementById('header-desktop');
-            let modeSearch = '';
+            header = document.getElementById('header-desktop');
+            searchContainer = document.getElementById('search-container');
             
             header.addEventListener('click', (event) => {
                 modeSearch = header.getAttribute('mode-search');
@@ -38,12 +42,18 @@
                             if(e.keyCode === 13) {
                                 search();
                             }
-                        })
+                        });
                     }
                     
                 } else if(modeSearch === 'off') {
                     if(event.target.classList.contains('button-search') && event.target.tagName === 'IMG') {
+                        const sliderItems = searchContainer.querySelectorAll('.slider-list li');
+                        
                         header.setAttribute('mode-search', 'on');
+                        
+                        if(sliderItems.length > 0) {
+                            searchContainer.classList.add('on');
+                        }
                     }
                 }
             });
@@ -79,10 +89,9 @@
                             cont++;
                         });
                         
-                        let container = document.getElementById('search-container');
-                        container.querySelector('iframe').src = videoUrl;
-                        container.querySelector('ul').innerHTML = html;
-                        container.classList.add('on');
+                        searchContainer.querySelector('iframe').src = videoUrl;
+                        searchContainer.querySelector('ul').innerHTML = html;
+                        searchContainer.classList.add('on');
                         
                         addListEvents();
                     }
@@ -108,36 +117,35 @@
         }
         
         function addListEvents() {
-            const list = document.querySelector('#search-container .slider-list');
+            const list = searchContainer.querySelector('.slider-list');
             
-            setTimeout(() => {obj.slider.init()}, 1000);
-            
-            list.addEventListener('click', (e) => {
-                
-            });
-            
-            function setSrcVideo(list, bro) {
-                if(list && bro) {
-                    let _video = '';
-                    let iframe = bro.querySelector('div');
-                    let id = bro.getAttribute('data-url');
+            function setSrcVideo(container, url) {
+                if(url && container) {
+                    let iframeSrc = container.querySelector('iframe').src;
                     
-                    if(!bro.querySelector('iframe')) {
-                        
-                    }
-                    
-                    _video = bro.querySelector('iframe');
-                    
-                    bro.style.height = bro.offsetHeight > 0 ? '0px' : _video.offsetHeight + 'px';
-                    
-                    const videoList = list.querySelectorAll(`.video:not([data-url="${id}"])`);
-                    videoList.forEach((item, i) => {
-                        if(item.offsetHeight > 0) {
-                            item.style.height = '0px';
-                        }
-                    });
+                    if(iframeSrc !== url) { container.querySelector('iframe').src = url; }
                 }
             }
+            
+            function closeSearch() {
+                let closeButton = searchContainer.querySelector('.close-search');
+                
+                closeButton.addEventListener('click', () => {
+                    if(modeSearch === 'on') { header.setAttribute('mode-search', 'off'); }
+                    searchContainer.classList.remove('on');
+                });
+            }
+            
+            closeSearch();
+            
+            setTimeout(() => {obj.slider.init();obj.aux.calcHeight()}, 1000);
+            
+            list.addEventListener('click', (e) => {
+                let videoCard = obj.aux.getParent('video-card', e.target);
+                if(videoCard) {
+                    setSrcVideo(searchContainer, videoCard.getAttribute('data-url'));
+                }
+            });
         }
         
         return {init}
@@ -148,7 +156,7 @@
             let firebaseConfig = document.getElementById("firebaseConfig");
             
             if(firebaseConfig) {
-                var config = firebaseConfig.innerHTML;
+                let config = firebaseConfig.innerHTML;
                 firebaseConfig.remove();
                 config = JSON.parse(config);
                 
@@ -157,7 +165,7 @@
         }
         
         function login() {
-            var provider = new firebase.auth.GoogleAuthProvider();
+            const provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider).then(function(result) {
                 const user = result.user;
                 let url = `/users/check?uid=${user.uid}`;
@@ -171,8 +179,8 @@
                 });
             }).catch(function(error) {
                 // Handle Errors here.
-                var errorCode = error.code;
-                var errorMessage = error.message;
+                const errorCode = error.code;
+                const errorMessage = error.message;
                 console.log("ERRORACO DEL DIONISIO");
                 logout();
             });
@@ -210,6 +218,7 @@
                 let config = {};
                 config._this = slider.querySelector('.slider-container');
                 config.sliderList = config._this.querySelector('.slider-list');
+                config.controls = config._this.querySelector('.slider-controls');
                 config.slides = config.sliderList.querySelectorAll('.slide');
                 config.numSlides = config.slides.length;
                 config.currentSlide = 0;
@@ -220,6 +229,10 @@
                 
                 config.nextButton.addEventListener('click', () => { nextSlide(config) });
                 config.prevButton.addEventListener('click', () => { prevSlide(config) });
+                
+                setBullets(config);
+                
+                config.controls.addEventListener('click', (event) => { bulletsAction(event, config) });
             });
         }
         
@@ -234,15 +247,27 @@
         
         function nextSlide(config) {
             if(config.currentSlide < (config.numSlides - 1)) {
+                let bullets = config.controls.querySelectorAll('.bullet-control');
+                
+                bullets[config.currentSlide].classList.remove('on');
+                
                 config.currentSlide++;
                 showSlide(config);
+                
+                bullets[config.currentSlide].classList.add('on');
             }
         }
         
         function prevSlide(config) {
             if(config.currentSlide > 0) {
+                let bullets = config.controls.querySelectorAll('.bullet-control');
+                
+                bullets[config.currentSlide].classList.remove('on');
+                
                 config.currentSlide--;
                 showSlide(config);
+                
+                bullets[config.currentSlide].classList.add('on');
             }
         }
         
@@ -252,7 +277,113 @@
             config.sliderList.style.transform = `translateX(${pos}px)`;
         }
         
+        function setBullets(config) {
+            let newBullet = document.createElement("LI");
+            newBullet.classList.add('bullet-control');
+            newBullet.setAttribute('data-slide', '0');
+            config.controls.appendChild(newBullet);
+            
+            let bullets = config.controls.querySelectorAll('.bullet-control');
+            
+            for(let i = bullets.length; i < config.numSlides; i++) {
+                newBullet = bullets[0].cloneNode(true);
+                newBullet.setAttribute('data-slide', `${i}`);
+                config.controls.appendChild(newBullet);
+            }
+            
+            bullets[0].classList.add('on');
+        }
+        
+        function bulletsAction(event, config) {
+            const _self = event.target;
+            let bullets = config.controls.querySelectorAll('.bullet-control');
+            
+            if(_self.classList.contains('bullet-control') && !_self.classList.contains('on')) {
+                for(let i = 0; i < bullets.length; i++) {
+                    if(bullets[i].classList.contains('on')) {
+                        bullets[i].classList.remove('on');
+                        break;
+                    }
+                }
+                
+                _self.classList.add('on');
+                config.currentSlide = _self.getAttribute('data-slide');
+                showSlide(config);
+            }
+        }
+        
         return {init};
+    })();
+    
+    obj.aux = (() => {
+        function getParent(parent, target) {
+            if(parent && target) {
+                let aux = true;
+                
+                while(aux) {
+                    if(target.tagName !== "BODY" && target.tagName !== "HTML") {
+                        console.log("Resultado if --> ", target.classList.contains(parent));
+                        if(target.classList.contains(parent)) {
+                            aux = target;
+                            break;
+                        } else {
+                            target = target.parentNode;
+                        }
+                    } else {
+                        aux = false;
+                        break;
+                    }
+                }
+                
+                return aux;
+            }
+        }
+        
+        function calcHeight() {
+            const arrayEq = document.querySelectorAll('[data-js="_calcHeight"]');
+            let isResponsive = true;
+            let onlyResponsive = false;
+        
+            if(arrayEq !== undefined && arrayEq.length > 0) {
+                arrayEq.forEach((item, i) => {
+                    let _this = item;
+                    let attrs = _this.getAttribute("data-eq-items");
+                    
+                    isResponsive = _this.getAttribute('data-resp') === 'false' ? false : true;
+                    onlyResponsive = _this.getAttribute('data-resp') === 'only' ? true : false;
+        
+                    if((isResponsive && !onlyResponsive) ||
+                        (!isResponsive && !onlyResponsive && document.body.offsetWidth > 960) ||
+                        (isResponsive && onlyResponsive && document.body.offsetWidth < 960)) {
+                        
+                        if(typeof attrs !== typeof undefined && attrs !== false) {
+                            attrs = attrs.split(',');
+    
+                            attrs.forEach((attr, i) => {
+                                let maxHeight = 0;
+                                let prevHeight = 0;
+                                let actualHeight = 0;
+                                let list = _this.querySelectorAll(attr);
+    
+                                list.forEach((listItem, i) => {
+                                    actualHeight = listItem.offsetHeight;
+    
+                                    maxHeight = actualHeight >= prevHeight ? actualHeight : prevHeight;
+    
+                                    prevHeight = listItem.offsetHeight;
+                                });
+                                
+                                list.forEach((listItem, i) => {
+                                    listItem.style.height = `${maxHeight}px`;
+                                });
+                            });
+                        }
+                    }
+                });
+            }
+        }
+        
+        return {getParent, calcHeight};
     })();
     
     obj.init = (() => {

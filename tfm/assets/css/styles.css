@@ -7,7 +7,7 @@ html, body {
     overflow: hidden;
     font-family: Roboto;
 }
-div, header, section, article, ul, li, nav {
+div, header, section, article, aside, iframe, ul, li, nav {
     box-sizing: border-box;
 }
 img {
@@ -773,11 +773,11 @@ img {
     z-index: 10;
 }
 .slider-container .next {
-    right: 0;
+    right: 12px;
     background-image: url(/img/icon-next.svg);
 }
 .slider-container .prev {
-    left: 0;
+    left: 12px;
     background-image: url(/img/icon-back.svg);
 }
 .slider-container .slider-list {
@@ -791,6 +791,24 @@ img {
     padding: 12px;
     float: left;
 }
+.slider-container .slider-controls {
+    text-align: center;
+}
+.slider-container .slider-controls .bullet-control {
+    background-color: #727272;
+    display: inline-block;
+    padding: 2px 10px;
+    margin-right: 5px;
+    height: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.slider-container .slider-controls .bullet-control:last-child {
+    margin-right: 0;
+}
+.slider-container .slider-controls .bullet-control.on {
+    background-color: #fff;
+}
 
 
 /* Video Cards */
@@ -798,10 +816,13 @@ img {
     display: inline-block;
     text-align: left;
     max-width: 300px;
+    cursor: pointer;
+}
+.video-card .video img {
+    width: 100%;
 }
 .video-card .video-info {
     background-color: #f4f4f4;
-    min-height: 150px;
     padding: 12px;
 }
 .video-card .video-info p:first-child {
@@ -908,9 +929,6 @@ img {
     display: inline-block;
     padding: 12px;
 }
-#dashboard-body {
-    
-}
 /* END dashboard */
 /* INIT Search */
 #search-container {
@@ -929,10 +947,21 @@ img {
     right: 0;
     width: 100%;
     height: calc(100% - 56px);
-    overflow: auto;
+    overflow-y: auto;
 }
 #search-container iframe {
     margin: 0 auto;
     display: block;
+}
+#search-container .player {
+    position: relative;
+}
+#search-container .close-search {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
 }
 /* END Search */
